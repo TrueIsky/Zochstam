@@ -21,13 +21,13 @@ export default function NavBar() {
     setValue(newValue);
     switch (newValue) {
       case 0:
-        router.push('/app'); 
+        router.push('/'); 
         break;
       case 1:
-        router.push('/app/profil');
+        router.push('/profil');
         break;
       case 2:
-        router.push('/app/prispevok'); 
+        router.push('/prispevok'); 
         break;
       case 3:
         router.push('/auth/prihlasenie');

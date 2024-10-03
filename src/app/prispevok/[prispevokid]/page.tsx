@@ -4,11 +4,11 @@ import Typography from '@mui/material/Typography';
 
 export const metadata = { title: `Detail prispevku | Zochstam`};
 
-export default function SubmissionDetail() {
+export default function SubmissionDetail({ params}: { params: {prispevokid: string}},) {
 
   return(
 
-      <Typography> Detail konkrétneho príspevku  </Typography>
+      <Typography> Detail konkrétneho príspevku {params.prispevokid}</Typography>
 
   );
 }
