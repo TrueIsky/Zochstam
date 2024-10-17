@@ -1,24 +1,31 @@
-import type { Metadata } from "next";
+// src/app/layout.tsx
+
+import { Metadata } from "next";
 import "./globals.css";
-import NavBar from '../componenets/NavBar';  
+import Navbar from "@/componenets/NavBar";
+import AuthProvider from "../componenets/AuthProvider";
 
 export const metadata: Metadata = {
-  title: "SnapZoska",
-  description: "Made by yours truly, Filip Išky",
+  title: "Zochstam",
+  description: "Created by Filip Išky",
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="sk">
       <body>
-        <div>
-          {children}
-          <NavBar /> {/* This will add the bottom navigation to all pages */}
-        </div>
+        <AuthProvider>
+          <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+            <main style={{ flexGrow: 1 }}>
+              {children}
+            </main>
+          </div>
+          <Navbar /> 
+        </AuthProvider>
       </body>
     </html>
   );

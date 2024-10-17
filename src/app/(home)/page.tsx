@@ -1,15 +1,23 @@
 // project001-filipisky-nextjs/src/app/page.tsx
 
-import Typography from '@mui/material/Typography';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions"; // path to your NextAuth options
+import LoggedIn from "@/sections/LoggedIn";
+import LoggedOut from "@/sections/Logged-out";
 
 export const metadata = { title: `Home | Zochstam`};
 
-export default function Home() {
+export default async function HomePage() {
+  const session = await getServerSession(authOptions);
 
-  return(
-
-      <Typography> Be gone heathen! </Typography>
-
+  return (
+    <>
+      {session ? (
+        <LoggedIn name={session.user?.name || "User"} />
+      ) : (
+        <LoggedOut />
+      )}
+    </>
   );
 }
 

@@ -1,8 +1,3 @@
-// project001-filipisky-nextjs/src/componenets/NavBar.tsx
-
-"use client";
-
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
@@ -11,49 +6,64 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { useRouter } from 'next/navigation';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp'; // Icon for logout
+import Link from 'next/link';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions';
 
-export default function NavBar() {
-  const [value, setValue] = React.useState(0);
-  const router = useRouter();
-
-  const handleNavigation = (newValue: number) => {
-    setValue(newValue);
-    switch (newValue) {
-      case 0:
-        router.push('/'); 
-        break;
-      case 1:
-        router.push('/profil');
-        break;
-      case 2:
-        router.push('/prispevok'); 
-        break;
-      case 3:
-        router.push('/auth/prihlasenie');
-        break;
-      case 4:
-        router.push('/auth/registracia'); 
-        break;
-      default:
-        break;
-    }
-  };
+export default async function NavBar() {
+  // Fetch the session server-side
+  const session = await getServerSession(authOptions);
 
   return (
     <Box sx={{ width: '100%', position: 'fixed', bottom: 0 }}>
-      <BottomNavigation
-        showLabels
-        value={value}
-        onChange={(event, newValue) => {
-          handleNavigation(newValue);
-        }}
-      >
-        <BottomNavigationAction label="Domov" icon={<HomeIcon />} />
-        <BottomNavigationAction label="Profil" icon={<AccountCircleIcon />} />
-        <BottomNavigationAction label="Príspevok" icon={<PostAddIcon />} />
-        <BottomNavigationAction label="Prihlásenie" icon={<LockOpenIcon />} />
-        <BottomNavigationAction label="Registrácia" icon={<PersonAddIcon />} />
+      <BottomNavigation showLabels>
+        <BottomNavigationAction
+          label="Domov"
+          icon={<HomeIcon />}
+          component={Link}
+          href="/"
+        />
+
+        {session ? (
+          // Display options for logged-in users
+          <>
+            <BottomNavigationAction
+              label="Profil"
+              icon={<AccountCircleIcon />}
+              component={Link}
+              href="/profil"
+            />
+            <BottomNavigationAction
+              label="Príspevok"
+              icon={<PostAddIcon />}
+              component={Link}
+              href="/prispevok"
+            />
+            <BottomNavigationAction
+              label="Odhlásiť"
+              icon={<ExitToAppIcon />}
+              component={Link}
+              href="/auth/odhlasenie"
+            />
+          </>
+        ) : (
+          // Display options for logged-out users
+          <>
+            <BottomNavigationAction
+              label="Prihlásenie"
+              icon={<LockOpenIcon />}
+              component={Link}
+              href="/auth/prihlasenie"
+            />
+            <BottomNavigationAction
+              label="Registrácia"
+              icon={<PersonAddIcon />}
+              component={Link}
+              href="/auth/registracia"
+            />
+          </>
+        )}
       </BottomNavigation>
     </Box>
   );
