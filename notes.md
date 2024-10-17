@@ -116,3 +116,5 @@ page – neccesary name for site
 -all names are neccesary
 not-found – overwrites deafult 404
 HomeView and NavBar – For now empty
+
+check
