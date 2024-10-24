@@ -11,7 +11,7 @@ export default function Prihlasenie() {
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
       <Typography variant="h2" gutterBottom>
-        Odhlásiť sa
+        Odhlásenie
       </Typography>
       <Button
         variant="contained" color="primary" onClick={() => signOut({ callbackUrl: '/' })} >

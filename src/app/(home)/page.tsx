@@ -13,7 +13,7 @@ export default async function HomePage() {
   return (
     <>
       {session ? (
-        <LoggedIn name={session.user?.name || "User"} />
+        <LoggedIn session={session} />
       ) : (
         <LoggedOut />
       )}

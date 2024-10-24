@@ -1,4 +1,5 @@
-//src/app/api/auth/[...nextauth]/authOptions.ts
+
+// src/app/api/auth/[...nextauth]/authOptions.ts
 
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
@@ -6,8 +7,8 @@ import GoogleProvider from "next-auth/providers/google";
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? (() => { throw new Error("GOOGLE_CLIENT_ID is not set"); })(),
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? (() => { throw new Error("GOOGLE_CLIENT_SECRET is not set"); })(),
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
