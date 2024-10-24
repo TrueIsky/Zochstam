@@ -1,33 +1,22 @@
 // project001-filipisky-nextjs/src/app/auth/odhlasenie/page.tsx
 
+"use client";
+
+import { signOut } from 'next-auth/react';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
-import Link from "next/link";
 
-export const metadata = { title: `Odhlásenie | Zochstam`};
 
-export default async function LogoutPage() {
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    return (
-      <div style={{ textAlign: "center", marginTop: "50px" }}>
-        <p>You are not logged in.</p>
-        <Link href="/">Go to the home page</Link>
-      </div>
-    );
-  }
-
+export default function Prihlasenie() {
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>Log out</h1>
-      <Link
-        href={`/api/auth/signout`}
-        style={{ padding: "10px", backgroundColor: "#d32f2f", color: "#fff", borderRadius: "5px", textDecoration: "none" }}
-      >
-        Log out
-      </Link>
+      <Typography variant="h2" gutterBottom>
+        Odhlásiť sa
+      </Typography>
+      <Button
+        variant="contained" color="primary" onClick={() => signOut({ callbackUrl: '/' })} >
+        Odhlásiť sa
+      </Button>
     </div>
   );
 }
