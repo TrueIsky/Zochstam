@@ -1,77 +1,66 @@
-// src/componenets/NavBar.tsx
+// /src/components/Navbar.tsx
 
 "use client";
 
-import { useSession } from "next-auth/react"; 
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import { BottomNavigation, BottomNavigationAction, Box, Avatar } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
-import PostAddIcon from '@mui/icons-material/PostAdd';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import LoginIcon from '@mui/icons-material/Login';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
-import Link from 'next/link';
-import Avatar from '@mui/material/Avatar'; // Import Avatar for profile picture
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useRouter } from 'next/navigation';
+import { useSession } from "next-auth/react";
 
-// Define a type for navigation items
-interface NavItem {
-  label: string;
-  icon: React.ReactNode;
-  href: string;
-  key: string; 
-}
+export default function Navbar() {
+  const [value, setValue] = React.useState('/');
+  const router = useRouter();
+  const { data: session, status } = useSession();
 
-// Function to create BottomNavigationAction components
-const createNavAction = (item: NavItem) => (
-  <BottomNavigationAction
-    key={item.key}
-    label={item.label}
-    icon={item.icon}
-    component={Link}
-    href={item.href}
-  />
-);
+  const handleNavigation = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+    router.push(newValue);
+  };
 
-export default function NavBar() {
-  const { data: session } = useSession(); 
-  const [value, setValue] = React.useState(0);
-
-  const LoggedOutItems: NavItem[] = [
-    { label: "Domov", icon: <HomeIcon />, href: "/", key: "home" },
-    { label: "Prispevky", icon: <PostAddIcon />, href: "/prispevok", key: "posts" },
-    { label: "Prihlásenie", icon: <LoginIcon />, href: "/auth/prihlasenie", key: "sign-in" },
-    { label: "Registrácia", icon: <AppRegistrationIcon />, href: "/auth/registracia", key: "register" },
+  // Common navigation items
+  const commonPaths = [
+    { label: "Domov", value: "/", icon: <HomeIcon /> },
   ];
 
-  const LoggedInItems: NavItem[] = [
-    { label: "Domov", icon: <HomeIcon />, href: "/", key: "home" },
-    { label: "Prispevky", icon: <PostAddIcon />, href: "/prispevok", key: "posts" },
+  // Conditional navigation paths based on authentication status
+  const authenticatedPaths = [
+    { label: "Pridať", value: "/prispevok", icon: <AddCircleIcon /> },
     {
       label: "Profil",
-      icon: (
-        <Avatar
-          alt={session?.user?.name || "User"}
-          src={session?.user?.image || "/default-avatar.png"}
-        />
+      value: "/profil",
+      icon: session?.user?.image ? (
+        <Avatar alt={session?.user?.name || "User"} src={session?.user?.image} />
+      ) : (
+        <Avatar>{session?.user?.name?.charAt(0) || "U"}</Avatar>
       ),
-      href: "/profil",
-      key: "profile",
     },
-    { label: "Odhlásiť sa", icon: <LoginIcon />, href: "/auth/odhlasenie", key: "sign-out" },
+    { label: "Odhlásiť", value: "/auth/odhlasenie", icon: <LogoutIcon /> },
   ];
+
+  const guestPaths = [
+    { label: "GDPR", value: "/gdpr", icon: <AddCircleIcon /> },
+    { label: "Registrácia", value: "/auth/registracia", icon: <AppRegistrationIcon /> },
+    { label: "Prihlásenie", value: "/auth/prihlasenie", icon: <LoginIcon /> },
+  ];
+
+  const navigationPaths = status === "authenticated" ? [...commonPaths, ...authenticatedPaths] : [...commonPaths, ...guestPaths];
 
   return (
     <Box sx={{ width: '100%', position: 'fixed', bottom: 0 }}>
-      <BottomNavigation
-        showLabels
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-      >
-        {/* Render non-authenticated or authenticated nav items based on session */}
-        {(session ? LoggedInItems : LoggedOutItems).map(createNavAction)}
+      <BottomNavigation value={value} onChange={handleNavigation} showLabels>
+        {navigationPaths.map((path) => (
+          <BottomNavigationAction
+            key={path.value}
+            label={path.label}
+            value={path.value}
+            icon={path.icon}
+          />
+        ))}
       </BottomNavigation>
     </Box>
   );
