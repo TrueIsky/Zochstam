@@ -1,14 +1,15 @@
 // src/app/layout.tsx
+"use client";
 
 import { Metadata } from "next";
-import "./globals.css";
-import Navbar from "@/componenets/NavBar";
-import AuthProvider from "../componenets/AuthProvider";
+import Navbar from "../componenets/NavBar";
+import { SessionProvider } from "next-auth/react";
+import { ThemeProviderWrapper } from "@/context/ThemeContext";  // Import Theme Context
 
-export const metadata: Metadata = {
-  title: "Zochstam",
-  description: "Created by Filip Išky",
-};
+// export const metadata: Metadata = {
+//   title: "Zochstam",
+//   description: "Created by Filip Išky",
+// };
 
 export default function RootLayout({
   children,
@@ -18,14 +19,13 @@ export default function RootLayout({
   return (
     <html lang="sk">
       <body>
-        <AuthProvider>
-          <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-            <main style={{ flexGrow: 1 }}>
-              {children}
-            </main>
-          </div>
-          <Navbar /> 
-        </AuthProvider>
+      <SessionProvider>
+        <ThemeProviderWrapper> {<div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+            <Navbar /> {/* Navbar will have access to theme toggle */}
+            <main style={{ flexGrow: 1 }}>{children}</main>
+          </div>}
+        </ThemeProviderWrapper>
+      </SessionProvider>
       </body>
     </html>
   );

@@ -8,7 +8,7 @@ export default function SubmissionAdding() {
 
   return(
 
-      <Typography> Formulár na pridanie príspevku </Typography>
+      <Typography variant='h1' color='primary'> Formulár na pridanie príspevku </Typography>
 
   );
 }
