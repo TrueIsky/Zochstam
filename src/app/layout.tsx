@@ -1,15 +1,18 @@
 // src/app/layout.tsx
-"use client";
 
 import { Metadata } from "next";
-import Navbar from "../componenets/NavBar";
-import { SessionProvider } from "next-auth/react";
-import { ThemeProviderWrapper } from "@/context/ThemeContext";  // Import Theme Context
+import "./globals.css";
+import Navbar from "@/componenets/NavBar";
+import AuthProvider from "@/componenets/AuthProvider";
+import { ThemeProvider } from "@mui/material/styles";
+import { Box, CssBaseline } from "@mui/material";
+import theme from "@/componenets/theme";
+import DarkModeButton from "@/componenets/DarkModeButton";
 
-// export const metadata: Metadata = {
-//   title: "Zochstam",
-//   description: "Created by Filip Išky",
-// };
+export const metadata: Metadata = {
+  title: "SnapZoška",
+  description: "Created by students of SPŠE Zochova 9, Bratislava",
+};
 
 export default function RootLayout({
   children,
@@ -19,13 +22,24 @@ export default function RootLayout({
   return (
     <html lang="sk">
       <body>
-      <SessionProvider>
-        <ThemeProviderWrapper> {<div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-            <Navbar /> {/* Navbar will have access to theme toggle */}
-            <main style={{ flexGrow: 1 }}>{children}</main>
-          </div>}
-        </ThemeProviderWrapper>
-      </SessionProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <AuthProvider>
+            <div
+              style={{
+                minHeight: "100vh",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >                
+              <Box style={{ display: "flex", flexDirection: "row-reverse", position: "fixed", width: "100%",}}>
+                <DarkModeButton />
+              </Box>
+              <main style={{ flexGrow: 1 }}>{children}</main>
+            </div>
+            <Navbar />
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
