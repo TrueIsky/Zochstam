@@ -1,5 +1,3 @@
-// src/app/prispevok/page.tsx
-
 import { PrismaClient } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import { Grid2, Card, CardContent, CardMedia, Box } from "@mui/material";
@@ -15,18 +13,23 @@ const PostList = async () => {
   try {
     // Fetch posts from the database
     const posts = await prisma.post.findMany({
+      take: 4, // Limit the results to 4 posts
       include: {
         user: true, // Optional: include related user info (like name, email, etc.)
       },
+      // Order by createdAt or any field of your choice (if needed)
+      orderBy: { id: 'asc' }, // You can change this if needed
     });
 
     if (posts.length === 0) {
       return <Typography>No posts found.</Typography>;
     }
 
+    // Randomly shuffle the posts (in case you want to mix them up)
+    const shuffledPosts = posts.sort(() => Math.random() - 0.5);
+
     return (
       <Box sx={{ padding: 3 }}>
-
         {/* Grid Layout for a single column */}
         <Grid2
           container
@@ -35,7 +38,7 @@ const PostList = async () => {
           justifyContent="center" // Center the content horizontally
           alignItems="center" // Align the items in the center
         >
-          {posts.map((post) => (
+          {shuffledPosts.map((post) => (
             <Grid2
               sx={{
                 width: '100%', // Full width for each item in the grid

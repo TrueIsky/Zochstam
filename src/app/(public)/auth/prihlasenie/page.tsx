@@ -8,9 +8,7 @@ import {
   Box,
   Button,
   Card,
-  CardContent,
-  Checkbox,
-  FormControlLabel,
+
   Typography,
   Link,
 } from "@mui/material";

@@ -42,8 +42,8 @@ export default function Navbar() {
 
   // Authenticated navigation paths
   const authPaths = [
-    { label: "Domov", value: "/", icon: <HomeIcon /> },
-    { label: "Pridať", value: "/prispevok", icon: <AddCircleIcon /> },
+    { label: "Domov", value: "/prispevok", icon: <HomeIcon /> },
+    { label: "Pridať", value: "/pridat", icon: <AddCircleIcon /> },
     { label: "Hladať", value: "/hladanie", icon: <SearchIcon /> },
     {
       label: "Profil",
